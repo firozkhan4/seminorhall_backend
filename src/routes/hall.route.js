@@ -15,28 +15,18 @@ router.get("/:id", async (req, res) => {
 });
 
 router.post("/", async (req, res) => {
-  const { _id, name, capacity, location, description, amenities, imageUrl } =
+  const { name, capacity, location, description, amenities, imageUrl } =
     req.body;
 
   try {
-    const hall = await hallModel.findOneAndUpdate(
-      { _id },
-      {
-        $set: {
-          name,
-          capacity,
-          location,
-          description,
-          amenities,
-          image_url: imageUrl,
-        },
-      },
-      {
-        new: true,
-        upsert: true,
-        runValidators: true,
-      },
-    );
+    const hall = await hallModel.create({
+      name,
+      capacity,
+      location,
+      description,
+      amenities,
+      image_url: imageUrl,
+    });
 
     return res.status(200).json({ output: hall });
   } catch (error) {
@@ -50,6 +40,8 @@ router.put("/:id", async (req, res) => {
   const { id } = req.params;
   const { name, capacity, location, description, amenities, imageUrl } =
     req.body;
+  console.log(req.body);
+  console.log(name, capacity, location, description, amenities, imageUrl);
   const hall = await hallModel.findByIdAndUpdate(id, {
     name,
     capacity,

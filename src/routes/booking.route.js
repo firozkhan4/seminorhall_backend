@@ -26,24 +26,18 @@ router.get("/:id", async (req, res) => {
 });
 
 router.post("/", async (req, res) => {
-  const { _id, user_id, hall_id, title, description, start_time, end_time } =
+  const { user_id, hall_id, title, description, start_time, end_time } =
     req.body;
 
   try {
-    const booking = await bookingModel.findOneAndUpdate(
-      { _id },
-      {
-        $set: {
-          user_id,
-          hall_id,
-          title,
-          description,
-          start_time,
-          end_time,
-        },
-      },
-      { new: true },
-    );
+    const booking = await bookingModel.create({
+      user_id,
+      hall_id,
+      title,
+      description,
+      start_time,
+      end_time,
+    });
     return res.status(200).json({ output: booking });
   } catch (error) {
     return res.status(400).json({ error: error.message });
